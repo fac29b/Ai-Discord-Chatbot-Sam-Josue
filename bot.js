@@ -1,3 +1,4 @@
+// Main code. Not yet seperated. 
 import dotenv from 'dotenv';
 import { Client, GatewayIntentBits } from 'discord.js';
 import { OpenAI } from 'openai';
