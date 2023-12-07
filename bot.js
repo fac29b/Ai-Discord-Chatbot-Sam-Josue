@@ -52,6 +52,7 @@ client.on('messageCreate', async (message) => {
     const challenges = generateCodeChallenges();
     const randomChallenge = challenges[Math.floor(Math.random() * challenges.length)];
     await message.reply(randomChallenge);
+    await message.channel.sendTyping()
   } else {
  // NORMAL AI CHATBOT FUNCTIONALITY
     const userMessage = message.content;
@@ -59,6 +60,7 @@ client.on('messageCreate', async (message) => {
 
     let prevMessages = await message.channel.messages.fetch({ limit: 12 });
     prevMessages = prevMessages.reverse();
+    await message.channel.sendTyping()
 
     prevMessages.forEach((msg) => {
       if (!msg.author.bot || msg.author.id === client.user.id) {
@@ -75,7 +77,7 @@ client.on('messageCreate', async (message) => {
       content: userMessage,
     });
 
-    console.log(userMessage);
+    console.log(typeof userMessage);
 
     try {
       const response = await openai.chat.completions.create({
@@ -84,11 +86,11 @@ client.on('messageCreate', async (message) => {
         stream: true,
       });
 
-      let botReply = '';
+     let botReply = '';
       for await (const chunk of response) {
         botReply += chunk.choices[0]?.delta?.content || '';
       }
-
+ 
       if (botReply) {
         message.reply(botReply.trim());
       }
