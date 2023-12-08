@@ -2,10 +2,9 @@
 import dotenv from 'dotenv';
 import { Client, GatewayIntentBits } from 'discord.js';
 import { OpenAI } from 'openai';
-
 dotenv.config();
 let conversation = [];
-
+let botIntroMsg = 'BOT INTRO MESSAGE! HARD CODED';
 let beginner = "beginner";
     let intermediate = "intermediate";
     let advanced = "advanced";
@@ -13,8 +12,6 @@ let beginner = "beginner";
     const beginnerMessage = `In this chat, do not provide any explanations of code. Only use single-letter variable names. Generate 1 example of a modern JavaScript code-reading challenge you might get in a job interview. The difficulty level should be ${beginner} For these examples, use a mixture of different array methods.`;
     const intermediateMessage = `In this chat, do not provide any explanations of code. Only use single-letter variable names. Generate 1 example of a modern JavaScript code-reading challenge you might get in a job interview. The difficulty level should be ${intermediate} For these examples, use a mixture of different array methods.`;
     const advancedMessage = `In this chat, do not provide any explanations of code. Only use single-letter variable names. Generate 1 example of a modern JavaScript code-reading challenge you might get in a job interview. The difficulty level should be ${advanced} For these examples, use a mixture of different array methods.`;
-
-
     const client = new Client({
       intents: [
         GatewayIntentBits.Guilds,
@@ -30,22 +27,16 @@ let beginner = "beginner";
     client.once('ready', () => {
       console.log('Bot is online');
     });
+    let sessionStarted = false;
     
     client.on('messageCreate', async (message) => {
       if (message.author.bot) return;
+    // intro message calling
     
       let prevMessages = await message.channel.messages.fetch({ limit: 12 });
       prevMessages = prevMessages.reverse();
       await message.channel.sendTyping();
-    
-      // prevMessages.forEach((msg) => {
-      //   if (!msg.author.bot || msg.author.id === client.user.id) {
-      //     conversation.push({
-      //       role: msg.author.id === client.user.id ? 'assistant' : 'user',
-      //       content: msg.content,
-      //     });
-      //   }
-      // });
+
 
       prevMessages.forEach((msg) => {
         if (!msg.author.bot || msg.author.id === client.user.id) {
@@ -54,28 +45,34 @@ let beginner = "beginner";
       });
 
       console.log(prevMessages)
-    
+      
+      if (!sessionStarted) {
+        message.reply(botIntroMsg);
+        sessionStarted = true;
+        return;
+      }
+
       if (message.content === '!beginner') {
-        pushIntoArray(conversation, beginnerMessage);
-       
+        pushIntoArray(conversation, 'assistant', beginnerMessage);
+
       }
       if (message.content === '!intermediate') {
-        pushIntoArray(conversation, intermediateMessage);
-     
+        pushIntoArray(conversation, 'assistant', intermediateMessage);
+
       }
 
       if (message.content === '!advanced') {
-        pushIntoArray(conversation, advancedMessage);
+        pushIntoArray(conversation, 'assistant', advancedMessage);
       }
 
-      function pushIntoArray(array, prompt) {
+      function pushIntoArray(array, role, content) {
         array.push({
           role: "user",
-          content: prompt
+          content: content
         })
       }
 
-   
+
     
       // Common logic for handling both special commands and regular messages
       try {
@@ -100,3 +97,4 @@ let beginner = "beginner";
     });
     
     client.login(process.env.DISCORD_TOKEN);
+    // up to date 
