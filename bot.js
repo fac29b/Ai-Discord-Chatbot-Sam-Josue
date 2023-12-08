@@ -47,12 +47,27 @@ let beginner = "beginner";
         }
       });
     
+      if (message.content === '!beginner') {
+        conversation.push({
+          role: 'user',
+          content: beginnerMessage,
+        });
+      }
       if (message.content === '!intermediate') {
         conversation.push({
           role: 'user',
           content: intermediateMessage,
         });
       }
+
+      if (message.content === '!advanced') {
+        conversation.push({
+          role: 'user',
+          content: advancedMessage,
+        });
+      }
+
+   
     
       // Common logic for handling both special commands and regular messages
       try {
