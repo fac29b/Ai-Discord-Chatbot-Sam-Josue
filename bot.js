@@ -53,6 +53,19 @@ let beginner = "beginner";
           content: beginnerMessage,
         });
       }
+      if (message.content === '!intermediate') {
+        conversation.push({
+          role: 'user',
+          content: intermediateMessage,
+        });
+      }
+
+      if (message.content === '!advanced') {
+        conversation.push({
+          role: 'user',
+          content: advancedMessage,
+        });
+      }
 
    
     
