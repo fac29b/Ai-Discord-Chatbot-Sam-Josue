@@ -38,33 +38,41 @@ let beginner = "beginner";
       prevMessages = prevMessages.reverse();
       await message.channel.sendTyping();
     
+      // prevMessages.forEach((msg) => {
+      //   if (!msg.author.bot || msg.author.id === client.user.id) {
+      //     conversation.push({
+      //       role: msg.author.id === client.user.id ? 'assistant' : 'user',
+      //       content: msg.content,
+      //     });
+      //   }
+      // });
+
       prevMessages.forEach((msg) => {
         if (!msg.author.bot || msg.author.id === client.user.id) {
-          conversation.push({
-            role: msg.author.id === client.user.id ? 'assistant' : 'user',
-            content: msg.content,
-          });
+          pushIntoArray(conversation, msg.author.id === client.user.id ? 'assistant' : 'user', msg.content);
         }
       });
+
+      console.log(prevMessages)
     
       if (message.content === '!beginner') {
-        conversation.push({
-          role: 'user',
-          content: beginnerMessage,
-        });
+        pushIntoArray(conversation, beginnerMessage);
+       
       }
       if (message.content === '!intermediate') {
-        conversation.push({
-          role: 'user',
-          content: intermediateMessage,
-        });
+        pushIntoArray(conversation, intermediateMessage);
+     
       }
 
       if (message.content === '!advanced') {
-        conversation.push({
-          role: 'user',
-          content: advancedMessage,
-        });
+        pushIntoArray(conversation, advancedMessage);
+      }
+
+      function pushIntoArray(array, prompt) {
+        array.push({
+          role: "user",
+          content: prompt
+        })
       }
 
    
