@@ -4,6 +4,15 @@ import { Client, GatewayIntentBits } from 'discord.js';
 import { OpenAI } from 'openai';
 
 dotenv.config();
+let conversation = [];
+
+let beginner = "beginner";
+    let intermediate = "intermediate";
+    let advanced = "advanced";
+    let firstMessge = "chicken";
+    const beginnerMessage = `In this chat, do not provide any explanations of code. Only use single-letter variable names. Generate 1 example of a modern JavaScript code-reading challenge you might get in a job interview. The difficulty level should be ${beginner} For these examples, use a mixture of different array methods.`;
+    const intermediateMessage = `In this chat, do not provide any explanations of code. Only use single-letter variable names. Generate 1 example of a modern JavaScript code-reading challenge you might get in a job interview. The difficulty level should be ${intermediate} For these examples, use a mixture of different array methods.`;
+    const advancedMessage = `In this chat, do not provide any explanations of code. Only use single-letter variable names. Generate 1 example of a modern JavaScript code-reading challenge you might get in a job interview. The difficulty level should be ${advanced} For these examples, use a mixture of different array methods.`;
 
 const client = new Client({
   intents: [
@@ -18,50 +27,48 @@ const openai = new OpenAI({
 });
 
 client.once('ready', () => {
+ 
   console.log('Bot is online');
 });
 
 
-//   const challenges = [];
-  
-//   challenges.push("const a = [5, 10, 15]; let sum = 0; for (let i = 0; i < a.length; i++) { sum += a[i]; } console.log(sum); // What's the output?"
-// )
-
-// challenges.push("const nums = [2, 3, 4, 5, 6]; let count = 0; for (let i = 0; i < nums.length; i++) { if (nums[i] % 2 === 0) { count++; } } console.log(count); // What's the output?"
-// )
-
-// challenges.push("const arr = [1, 2, 3]; const squares = []; for (let i = 0; i < arr.length; i++) { squares.push(arr[i] * arr[i]); } console.log(squares); // What's the output?"
-// )
-
-// challenges.push("const numbers = [3, 1, 7, 4]; let max = numbers[0]; for (let i = 1; i < numbers.length; i++) { if (numbers[i] > max) { max = numbers[i]; } } console.log(max); // What's the output?"
-// )
-
-// challenges.push("const items = [1, 3, 5, 7]; let found = false; for (let i = 0; i < items.length; i++) { if (items[i] === 4) { found = true; break; } } console.log(found); // What's the output?"
-// )
 
 
-//   return challenges;
-// }
 
 //WHEN YOU ENTER !codeChallenge IT TRIGGERS THE CODE BOT. 
 client.on('messageCreate', async (message) => {
   if (message.author.bot) return;
 
-  if (message.content === '!codeChallenge') {
+// history goes here
+    let prevMessages = await message.channel.messages.fetch({ limit: 12 });
+    prevMessages = prevMessages.reverse();
+    await message.channel.sendTyping()
+
+    prevMessages.forEach((msg) => {
+      if (!msg.author.bot || msg.author.id === client.user.id) {
+        conversation.push({
+          role: msg.author.id === client.user.id ? 'assistant' : 'user',
+          content: msg.content,
+        });
+      }
+    });
+// 
+
+  if (message.content === '!intermediate') {
+    conversation.push({
+      role: 'user',
+      content: beginnerMessage,
+    });
+
+    console.log(conversation)
 
     await message.channel.sendTyping()
   } else {
  // NORMAL AI CHATBOT FUNCTIONALITY
-    let beginner = "beginner";
-    let intermediate = "intermediate";
-    let advanced = "advanced";
-    const beginnerMessage = `In this chat, do not provide any explanations of code. Only use single-letter variable names. Generate 1 example of a modern JavaScript code-reading challenge you might get in a job interview. The difficulty level should be ${beginner} For these examples, use a mixture of different array methods.`;
-    const intermediateMessage = `In this chat, do not provide any explanations of code. Only use single-letter variable names. Generate 1 example of a modern JavaScript code-reading challenge you might get in a job interview. The difficulty level should be ${intermediate} For these examples, use a mixture of different array methods.`;
-    const advancedMessage = `In this chat, do not provide any explanations of code. Only use single-letter variable names. Generate 1 example of a modern JavaScript code-reading challenge you might get in a job interview. The difficulty level should be ${advanced} For these examples, use a mixture of different array methods.`;
+    
 
   
-    let conversation = [];
-
+    
     
 
     let prevMessages = await message.channel.messages.fetch({ limit: 12 });
@@ -77,10 +84,10 @@ client.on('messageCreate', async (message) => {
       }
     });
   
-    conversation.push({
-      role: 'user',
-      content: beginnerMessage,
-    });
+    // conversation.push({
+    //   role: 'user',
+    //   content: firstMessge,
+    // });
 
     console.log(typeof userMessage);
 
