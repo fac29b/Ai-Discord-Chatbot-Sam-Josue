@@ -47,12 +47,14 @@ let beginner = "beginner";
         }
       });
     
-      if (message.content === '!intermediate') {
+      if (message.content === '!beginner') {
         conversation.push({
           role: 'user',
-          content: intermediateMessage,
+          content: beginnerMessage,
         });
       }
+
+   
     
       // Common logic for handling both special commands and regular messages
       try {
