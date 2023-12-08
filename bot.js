@@ -57,7 +57,7 @@ client.on('messageCreate', async (message) => {
   if (message.content === '!intermediate') {
     conversation.push({
       role: 'user',
-      content: beginnerMessage,
+      content: intermediateMessage,
     });
 
     console.log(conversation)
