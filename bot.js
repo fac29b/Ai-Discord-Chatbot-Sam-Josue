@@ -22,41 +22,47 @@ client.once('ready', () => {
 });
 
 
-function generateCodeChallenges() {
-  const challenges = [];
+//   const challenges = [];
   
-  challenges.push("const a = [5, 10, 15]; let sum = 0; for (let i = 0; i < a.length; i++) { sum += a[i]; } console.log(sum); // What's the output?"
-)
+//   challenges.push("const a = [5, 10, 15]; let sum = 0; for (let i = 0; i < a.length; i++) { sum += a[i]; } console.log(sum); // What's the output?"
+// )
 
-challenges.push("const nums = [2, 3, 4, 5, 6]; let count = 0; for (let i = 0; i < nums.length; i++) { if (nums[i] % 2 === 0) { count++; } } console.log(count); // What's the output?"
-)
+// challenges.push("const nums = [2, 3, 4, 5, 6]; let count = 0; for (let i = 0; i < nums.length; i++) { if (nums[i] % 2 === 0) { count++; } } console.log(count); // What's the output?"
+// )
 
-challenges.push("const arr = [1, 2, 3]; const squares = []; for (let i = 0; i < arr.length; i++) { squares.push(arr[i] * arr[i]); } console.log(squares); // What's the output?"
-)
+// challenges.push("const arr = [1, 2, 3]; const squares = []; for (let i = 0; i < arr.length; i++) { squares.push(arr[i] * arr[i]); } console.log(squares); // What's the output?"
+// )
 
-challenges.push("const numbers = [3, 1, 7, 4]; let max = numbers[0]; for (let i = 1; i < numbers.length; i++) { if (numbers[i] > max) { max = numbers[i]; } } console.log(max); // What's the output?"
-)
+// challenges.push("const numbers = [3, 1, 7, 4]; let max = numbers[0]; for (let i = 1; i < numbers.length; i++) { if (numbers[i] > max) { max = numbers[i]; } } console.log(max); // What's the output?"
+// )
 
-challenges.push("const items = [1, 3, 5, 7]; let found = false; for (let i = 0; i < items.length; i++) { if (items[i] === 4) { found = true; break; } } console.log(found); // What's the output?"
-)
+// challenges.push("const items = [1, 3, 5, 7]; let found = false; for (let i = 0; i < items.length; i++) { if (items[i] === 4) { found = true; break; } } console.log(found); // What's the output?"
+// )
 
 
-  return challenges;
-}
+//   return challenges;
+// }
 
 //WHEN YOU ENTER !codeChallenge IT TRIGGERS THE CODE BOT. 
 client.on('messageCreate', async (message) => {
   if (message.author.bot) return;
 
   if (message.content === '!codeChallenge') {
-    const challenges = generateCodeChallenges();
-    const randomChallenge = challenges[Math.floor(Math.random() * challenges.length)];
-    await message.reply(randomChallenge);
+
     await message.channel.sendTyping()
   } else {
  // NORMAL AI CHATBOT FUNCTIONALITY
-    const userMessage = message.content;
+    let beginner = "beginner";
+    let intermediate = "intermediate";
+    let advanced = "advanced";
+    const beginnerMessage = `In this chat, do not provide any explanations of code. Only use single-letter variable names. Generate 1 example of a modern JavaScript code-reading challenge you might get in a job interview. The difficulty level should be ${beginner} For these examples, use a mixture of different array methods.`;
+    const intermediateMessage = `In this chat, do not provide any explanations of code. Only use single-letter variable names. Generate 1 example of a modern JavaScript code-reading challenge you might get in a job interview. The difficulty level should be ${intermediate} For these examples, use a mixture of different array methods.`;
+    const advancedMessage = `In this chat, do not provide any explanations of code. Only use single-letter variable names. Generate 1 example of a modern JavaScript code-reading challenge you might get in a job interview. The difficulty level should be ${advanced} For these examples, use a mixture of different array methods.`;
+
+  
     let conversation = [];
+
+    
 
     let prevMessages = await message.channel.messages.fetch({ limit: 12 });
     prevMessages = prevMessages.reverse();
@@ -70,18 +76,17 @@ client.on('messageCreate', async (message) => {
         });
       }
     });
-
-   
+  
     conversation.push({
       role: 'user',
-      content: userMessage,
+      content: beginnerMessage,
     });
 
     console.log(typeof userMessage);
 
     try {
       const response = await openai.chat.completions.create({
-        model: "gpt-4",
+        model: "gpt-3.5-turbo",
         messages: conversation,
         stream: true,
       });
