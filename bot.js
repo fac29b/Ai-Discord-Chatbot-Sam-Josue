@@ -44,15 +44,12 @@ let beginner = "beginner";
       ));
 
       
-     
-    
-    
     client.on('messageCreate', async (message) => {
       if(message.author.bot) return 
       if(message.content !== "!beginner" && message.content !== "!intermediate" && message.content !== "!advanced") {
         // message.reply(botIntroMsg);
 
-        message.reply({ content: botIntroMsg, components: [row] });
+       return message.reply({ content: botIntroMsg, components: [row] });
         
 
       } 
@@ -69,34 +66,7 @@ let beginner = "beginner";
         }
       });
 
-      client.on('interactionCreate', async (interaction) => {
-        console.log("Received interaction:", interaction); 
 
-        
-      
-        if (!interaction.isButton()) return;
-      
-        console.log("Button interaction:", interaction.customId);
-      
-        let responseMessage = '';
-        switch (interaction.customId) {
-          case 'beginner':
-            responseMessage = "To start the Beginner challenge, type `!beginner`.";
-            break;
-          case 'intermediate':
-            responseMessage = "To start the Intermediate challenge, type `!intermediate`.";
-            break;
-          case 'advanced':
-            responseMessage = "To start the Advanced challenge, type `!advanced`.";
-            break;
-          default:
-            responseMessage = "Invalid selection";
-        }
-      
-        await interaction.reply({ content: responseMessage, ephemeral: true });
-        console.log(`Replied to ${interaction.customId} interaction`);
-      });
-      
       
 
       // console.log(prevMessages)
@@ -148,6 +118,32 @@ let beginner = "beginner";
         console.error('OpenAI Error:', error.message);
         message.reply("Apologies, but I'm unable to respond right now.");
       }
+    });
+
+    client.on('interactionCreate', async (interaction) => {
+      console.log("Received interaction:", interaction);
+    
+      if (!interaction.isButton()) return;
+    
+      console.log("Button interaction:", interaction.customId);
+    
+      let responseMessage = '';
+      switch (interaction.customId) {
+        case 'beginner':
+          responseMessage = "To start the Beginner challenge, type `!beginner`.";
+          break;
+        case 'intermediate':
+          responseMessage = "To start the Intermediate challenge, type `!intermediate`.";
+          break;
+        case 'advanced':
+          responseMessage = "To start the Advanced challenge, type `!advanced`.";
+          break;
+        default:
+          responseMessage = "Invalid selection";
+      }
+    
+      await interaction.reply({ content: responseMessage, ephemeral: true });
+      console.log(`Replied to ${interaction.customId} interaction`);
     });
     
     client.login(process.env.DISCORD_TOKEN);
