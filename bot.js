@@ -4,7 +4,7 @@ import { Client, GatewayIntentBits, ButtonBuilder, ButtonStyle, ActionRowBuilder
 import { OpenAI } from 'openai';
 dotenv.config();
 let conversation = [];
-let botIntroMsg = 'Hello there! I am a bot designed to help you practice your Javascript code-reading skills. I have 3 modes: Beginner, Intermediate and Advanced. Selecting one of these buttons will provide you with an appropriate Javascript example code to read. In addition to using the buttons, you can type prompts to start the challenges, too. For Beginner, type = !beginner | For Intermediate, type !intermediate | For Advanced, type !advanced.';
+let botIntroMsg = 'Hello there! I am a bot designed to help you practice your Javascriptcode-reading skills. I have 3 modes, Beginner, Intermediate and Advanced. Selecting one of these buttons will provide you with an appropriate Javascript example code to read. In addition to using the buttons, you can type prompts to start the challenges, too. For Beginner, type = !beginner | For Intermediate, type !intermediate | For Advanced, type !advanced.';
 
 const botButtons = [
   { label: 'Beginner', customId: 'beginner' },
@@ -35,16 +35,33 @@ let beginner = "beginner";
     });
    
 
-    let sessionStarted = false;
+
+      const row = new ActionRowBuilder().addComponents( botButtons.map(button =>
+        new ButtonBuilder()
+        .setCustomId(button.customId)
+        .setLabel(button.label)
+        .setStyle(ButtonStyle.Primary)
+      ));
+
+      
+     
+    
     
     client.on('messageCreate', async (message) => {
-      if (message.author.bot) return;
+      if(message.author.bot) return 
+      if(message.content !== "!beginner" && message.content !== "!intermediate" && message.content !== "!advanced") {
+        // message.reply(botIntroMsg);
+
+        message.reply({ content: botIntroMsg, components: [row] });
+        
+
+      } 
+     
     // intro message calling
     
       let prevMessages = await message.channel.messages.fetch({ limit: 12 });
       prevMessages = prevMessages.reverse();
       await message.channel.sendTyping();
-
 
       prevMessages.forEach((msg) => {
         if (!msg.author.bot || msg.author.id === client.user.id) {
@@ -54,6 +71,8 @@ let beginner = "beginner";
 
       client.on('interactionCreate', async (interaction) => {
         console.log("Received interaction:", interaction); 
+
+        
       
         if (!interaction.isButton()) return;
       
@@ -82,17 +101,7 @@ let beginner = "beginner";
 
       // console.log(prevMessages)
       
-      if (!sessionStarted) {
-        const row = new ActionRowBuilder().addComponents( botButtons.map(button =>
-          new ButtonBuilder()
-          .setCustomId(button.customId)
-          .setLabel(button.label)
-          .setStyle(ButtonStyle.Primary)
-        ));
-        message.reply({ content: botIntroMsg, components: [row] });
-        sessionStarted = true;
-        return;
-      }
+     
 
 
       if (message.content === '!beginner' ) {
