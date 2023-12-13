@@ -11,7 +11,7 @@ const botButtons = [
   { label: 'Intermediate', customId: 'intermediate' },
   { label: 'Advanced', customId: 'advanced' }
 ];
-let beginner = "beginner";
+    let beginner = "beginner";
     let intermediate = "intermediate";
     let advanced = "advanced";
     // let firstMessge = "chicken";
@@ -45,6 +45,7 @@ let beginner = "beginner";
 
       
     client.on('messageCreate', async (message) => {
+      console.log(message)
       if(message.author.bot) return 
       if(message.content !== "!beginner" && message.content !== "!intermediate" && message.content !== "!advanced") {
         // message.reply(botIntroMsg);
