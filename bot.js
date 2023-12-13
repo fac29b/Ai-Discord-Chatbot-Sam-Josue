@@ -14,7 +14,6 @@ const botButtons = [
     let beginner = "beginner";
     let intermediate = "intermediate";
     let advanced = "advanced";
-    // let firstMessge = "chicken";
     const beginnerMessage = `In this chat, do not provide any explanations of code. Only use single-letter variable names. Generate 1 example of a modern JavaScript code-reading challenge you might get in a job interview. The difficulty level should be ${beginner} For these examples, use a mixture of different array methods.`;
     const intermediateMessage = `In this chat, do not provide any explanations of code. Only use single-letter variable names. Generate 1 example of a modern JavaScript code-reading challenge you might get in a job interview. The difficulty level should be ${intermediate} For these examples, use a mixture of different array methods.`;
     const advancedMessage = `In this chat, do not provide any explanations of code. Only use single-letter variable names. Generate 1 example of a modern JavaScript code-reading challenge you might get in a job interview. The difficulty level should be ${advanced} For these examples, use a mixture of different array methods.`;
@@ -48,7 +47,6 @@ const botButtons = [
       console.log(message)
       if(message.author.bot) return 
       if(message.content !== "!beginner" && message.content !== "!intermediate" && message.content !== "!advanced") {
-        // message.reply(botIntroMsg);
 
        return message.reply({ content: botIntroMsg, components: [row] });
         
@@ -70,7 +68,6 @@ const botButtons = [
 
       
 
-      // console.log(prevMessages)
       
      
 
@@ -94,7 +91,6 @@ const botButtons = [
       function pushIntoArray(array, role, content) {
         array.push({
           role: role,
-          // "user"
           content: content
         })
       }
@@ -148,4 +144,4 @@ const botButtons = [
     });
     
     client.login(process.env.DISCORD_TOKEN);
-    // up to date 
+  
