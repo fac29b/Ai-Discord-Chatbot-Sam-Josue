@@ -9,16 +9,19 @@ let botIntroMsg = 'Hello there! I am a bot designed to help you practice your Ja
 const botButtons = [
   { label: 'Beginner', customId: 'beginner' },
   { label: 'Intermediate', customId: 'intermediate' },
-  { label: 'Advanced', customId: 'advanced' }
+  { label: 'Advanced', customId: 'advanced' },
+  { label: 'Hint', customId: 'hint' }
 ];
-let beginner = "beginner";
+
     let intermediate = "intermediate";
     let advanced = "advanced";
     // let firstMessge = "chicken";
-    const beginnerMessage = `In this chat, do not provide any explanations of code. Only use single-letter variable names. Generate 1 example of a modern JavaScript code-reading challenge you might get in a job interview. The difficulty level should be ${beginner} For these examples, use a mixture of different array methods.`;
+    const beginnerMessage = `In this chat, do not provide any explanations of code. Only use single-letter variable names. Generate 1 example of a modern JavaScript code-reading challenge you might get in a job interview. The difficulty level should be beginner For these examples, use a mixture of different array methods.`;
     const intermediateMessage = `In this chat, do not provide any explanations of code. Only use single-letter variable names. Generate 1 example of a modern JavaScript code-reading challenge you might get in a job interview. The difficulty level should be ${intermediate} For these examples, use a mixture of different array methods.`;
     const advancedMessage = `In this chat, do not provide any explanations of code. Only use single-letter variable names. Generate 1 example of a modern JavaScript code-reading challenge you might get in a job interview. The difficulty level should be ${advanced} For these examples, use a mixture of different array methods.`;
+    const hintMessage = `Create a hint for the most recent code challenge that you sent.`;
     const client = new Client({
+    
       intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
@@ -49,8 +52,7 @@ let beginner = "beginner";
       if(message.content !== "!beginner" && message.content !== "!intermediate" && message.content !== "!advanced") {
         // message.reply(botIntroMsg);
 
-       return message.reply({ content: botIntroMsg, components: [row] });
-        
+       return message.reply({ content: botIntroMsg, components: [row] }); 
 
       } 
      
@@ -127,6 +129,7 @@ let beginner = "beginner";
     
       console.log("Button interaction:", interaction.customId);
     
+
       let responseMessage = '';
       switch (interaction.customId) {
         case 'beginner':
@@ -138,6 +141,7 @@ let beginner = "beginner";
         case 'advanced':
           responseMessage = "To start the Advanced challenge, type `!advanced`.";
           break;
+       
         default:
           responseMessage = "Invalid selection";
       }
