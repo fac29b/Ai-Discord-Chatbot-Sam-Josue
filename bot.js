@@ -1,4 +1,4 @@
-// Main code. Not yet separated. 
+
 import dotenv from 'dotenv';
 import { Client, GatewayIntentBits, ButtonBuilder, ButtonStyle, ActionRowBuilder} from 'discord.js';
 import { OpenAI } from 'openai';
