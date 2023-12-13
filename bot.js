@@ -68,25 +68,18 @@ const botButtons = [
 
       
 
-      
-     
-
-
-      if (message.content === '!beginner' ) {
+      switch(message.content) {
+        case "!beginner": 
         pushIntoArray(conversation, 'assistant', beginnerMessage);
-
-
-      }
-      if (message.content === '!intermediate') {
+        break;
+        case "!intermediate":
         pushIntoArray(conversation, 'assistant', intermediateMessage);
-
-      }
-
-      if (message.content === '!advanced') {
+        break;
+        case "!advanced":
         pushIntoArray(conversation, 'assistant', advancedMessage);
-      }
 
-  
+      }
+     
 
       function pushIntoArray(array, role, content) {
         array.push({
