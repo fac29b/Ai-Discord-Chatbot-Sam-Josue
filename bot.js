@@ -1,17 +1,18 @@
-// Main code. Not yet separated. 
-import dotenv from 'dotenv';
-import { Client, GatewayIntentBits, ButtonBuilder, ButtonStyle, ActionRowBuilder, SlashCommandBuilder } from 'discord.js';
-import { OpenAI } from 'openai';
+import dotenv from "dotenv";
+import { Client, GatewayIntentBits, ButtonBuilder, ButtonStyle, ActionRowBuilder } from "discord.js";
+import { OpenAI } from "openai";
 dotenv.config();
 let conversation = [];
-let botIntroMsg = 'Hello there! I am a bot designed to help you practice your Javascriptcode-reading skills. I have 3 modes, Beginner, Intermediate and Advanced. Selecting one of these buttons will provide you with an appropriate Javascript example code to read. In addition to using the buttons, you can type prompts to start the challenges, too. For Beginner, type = !beginner | For Intermediate, type !intermediate | For Advanced, type !advanced.';
+let botIntroMsg = "Hello there! I am a bot designed to help you practice your Javascriptcode-reading skills. I have 3 modes, Beginner, Intermediate and Advanced. Selecting one of these buttons will provide you with an appropriate Javascript example code to read. In addition to using the buttons, you can type prompts to start the challenges, too. For Beginner, type = !beginner | For Intermediate, type !intermediate | For Advanced, type !advanced.";
 
 const botButtons = [
-  { label: 'Beginner', customId: 'beginner' },
-  { label: 'Intermediate', customId: 'intermediate' },
-  { label: 'Advanced', customId: 'advanced' },
-  { label: 'Hint', customId: 'hint' }
+
+  { label: "Beginner", customId: "beginner" },
+  { label: "Intermediate", customId: "intermediate" },
+  { label: "Advanced", customId: "advanced" },
+      // { label: 'Hint', customId: 'hint' }
 ];
+
 
     let intermediate = "intermediate";
     let advanced = "advanced";
@@ -33,122 +34,109 @@ const botButtons = [
       apiKey: process.env.OPEN_API_KEY,
     });
 
-    client.once('ready', () => {
-      console.log('Bot is online');
-    });
-   
 
+client.once("ready", () => {
+  console.log("Bot is online");
+});
 
-      const row = new ActionRowBuilder().addComponents( botButtons.map(button =>
-        new ButtonBuilder()
-        .setCustomId(button.customId)
-        .setLabel(button.label)
-        .setStyle(ButtonStyle.Primary)
-      ));
+const row = new ActionRowBuilder().addComponents(
+  botButtons.map((button) =>
+    new ButtonBuilder()
+      .setCustomId(button.customId)
+      .setLabel(button.label)
+      .setStyle(ButtonStyle.Primary)
+  )
+);
 
-      
-    client.on('messageCreate', async (message) => {
-      if(message.author.bot) return 
-      if(message.content !== "!beginner" && message.content !== "!intermediate" && message.content !== "!advanced") {
-        // message.reply(botIntroMsg);
+client.on("messageCreate", async (message) => {
+  console.log(message);
+  if (message.author.bot) return;
+  if (message.content !== "!beginner" && message.content !== "!intermediate" && message.content !== "!advanced") {
+    return message.reply({ content: botIntroMsg, components: [row] });
+  }
 
-       return message.reply({ content: botIntroMsg, components: [row] }); 
+  // intro message calling
 
-      } 
-     
-    // intro message calling
-    
-      let prevMessages = await message.channel.messages.fetch({ limit: 12 });
-      prevMessages = prevMessages.reverse();
-      await message.channel.sendTyping();
+  let prevMessages = await message.channel.messages.fetch({ limit: 12 });
+  prevMessages = prevMessages.reverse();
+  await message.channel.sendTyping();
 
-      prevMessages.forEach((msg) => {
-        if (!msg.author.bot || msg.author.id === client.user.id) {
-          pushIntoArray(conversation, msg.author.id === client.user.id ? 'assistant' : 'user', msg.content);
-        }
-      });
+  prevMessages.forEach((msg) => {
+    if (!msg.author.bot || msg.author.id === client.user.id) {
+      pushIntoArray(
+        conversation,
+        msg.author.id === client.user.id ? "assistant" : "user",
+        msg.content
+      );
+    }
+  });
 
+  switch (message.content) {
+    case "!beginner":
+      pushIntoArray(conversation, "assistant", beginnerMessage);
+      break;
+    case "!intermediate":
+      pushIntoArray(conversation, "assistant", intermediateMessage);
+      break;
+    case "!advanced":
+      pushIntoArray(conversation, "assistant", advancedMessage);
+  }
 
-      
-
-      // console.log(prevMessages)
-      
-     
-
-
-      if (message.content === '!beginner' ) {
-        pushIntoArray(conversation, 'assistant', beginnerMessage);
-
-
-      }
-      if (message.content === '!intermediate') {
-        pushIntoArray(conversation, 'assistant', intermediateMessage);
-
-      }
-
-      if (message.content === '!advanced') {
-        pushIntoArray(conversation, 'assistant', advancedMessage);
-      }
-
-  
-
-      function pushIntoArray(array, role, content) {
-        array.push({
-          role: role,
-          // "user"
-          content: content
-        })
-      }
-
-      // Common logic for handling both special commands and regular messages
-      try {
-        const response = await openai.chat.completions.create({
-          model: "gpt-3.5-turbo",
-          messages: conversation,
-          stream: true,
-        });
-    
-        let botReply = '';
-        for await (const chunk of response) {
-          botReply += chunk.choices[0]?.delta?.content || '';
-        }
-    
-        if (botReply) {
-          message.reply(botReply.trim());
-        }
-      } catch (error) {
-        console.error('OpenAI Error:', error.message);
-        message.reply("Apologies, but I'm unable to respond right now.");
-      }
+  function pushIntoArray(array, role, content) {
+    array.push({
+      role: role,
+      content: content,
     });
 
-    client.on('interactionCreate', async (interaction) => {
-      console.log("Received interaction:", interaction);
-    
-      if (!interaction.isButton()) return;
-    
-      console.log("Button interaction:", interaction.customId);
-    
+  }
 
-      let responseMessage = '';
-      switch (interaction.customId) {
-        case 'beginner':
-          responseMessage = "To start the Beginner challenge, type `!beginner`.";
-          break;
-        case 'intermediate':
-          responseMessage = "To start the Intermediate challenge, type `!intermediate`.";
-          break;
-        case 'advanced':
-          responseMessage = "To start the Advanced challenge, type `!advanced`.";
-          break;
-       
-        default:
-          responseMessage = "Invalid selection";
-      }
-    
-      await interaction.reply({ content: responseMessage, ephemeral: true });
-      console.log(`Replied to ${interaction.customId} interaction`);
+  // Common logic for handling both special commands and regular messages
+  try {
+    const response = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: conversation,
+      stream: true,
     });
-    
-    client.login(process.env.DISCORD_TOKEN);
-    // up to date 
+
+    let botReply = "";
+    for await (const chunk of response) {
+      botReply += chunk.choices[0]?.delta?.content || "";
+    }
+
+    if (botReply) {
+      message.reply(botReply.trim());
+    }
+  } catch (error) {
+    console.error("OpenAI Error:", error.message);
+    message.reply("Apologies, but I'm unable to respond right now.");
+  }
+});
+
+client.on("interactionCreate", async (interaction) => {
+  console.log("Received interaction:", interaction);
+
+  if (!interaction.isButton()) return;
+
+  console.log("Button interaction:", interaction.customId);
+
+  let responseMessage = "";
+  switch (interaction.customId) {
+    case "beginner":
+      responseMessage = "To start the Beginner challenge, type `!beginner`.";
+      break;
+    case "intermediate":
+      responseMessage =
+        "To start the Intermediate challenge, type `!intermediate`.";
+      break;
+    case "advanced":
+      responseMessage = "To start the Advanced challenge, type `!advanced`.";
+      break;
+    default:
+      responseMessage = "Invalid selection";
+  }
+
+  await interaction.reply({ content: responseMessage, ephemeral: true });
+  console.log(`Replied to ${interaction.customId} interaction`);
+});
+
+client.login(process.env.DISCORD_TOKEN);
