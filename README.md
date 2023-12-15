@@ -1,12 +1,13 @@
 # Discord Code-Reading Bot
 
-This Discord bot is designed to help users practice their JavaScript code-reading skills. The bot provides code challenges for different difficulty levels and allows users to interact with the challenges using buttons or commands.
+This Discord bot is designed to help users practice their JavaScript code-reading skills. The bot provides code challenges for different difficulty levels and allows users to interact with the challenges using buttons and then prompts.
 
 ## Features
 
 - Three difficulty levels: Beginner, Intermediate, and Advanced.
 - Code challenges with instructions to read and understand JavaScript code.
 - Interaction through buttons for ease of use.
+- Specific written prompts that are displayed when the corresponding button is clicked. 
 
 ## Getting Started
 
@@ -35,9 +36,13 @@ Use the Discord Developer Portal to create a bot and get the bot token. Then, cr
 
 6. Interact with the bot
 
-Use the !beginner, !intermediate, and !advanced commands to start challenges.
-Click the buttons for each difficulty level to receive instructions.
+Use the !beginner, !intermediate, and !advanced commands to display the required prompt for each challenge. 
+Enter the prompt using discord chat. 
 Enjoy practicing your JavaScript code-reading skills!
+
+** Coming Soon ** 
+- A hint button displayed in each code reading challenge. When clicked, the hint button sends a direct message that provides the user some assistance in the challenge. 
+- Buttons that automatically generate the corresponding code challenge rather than having the required prompt. This eleminates an entire step and makes the bot more seemless and user-friendly.
 
 ## Dependencies
 
