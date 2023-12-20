@@ -119,24 +119,32 @@ client.on("interactionCreate", async (interaction) => {
 
   console.log("Button interaction:", interaction.customId);
 
-  let responseMessage = "";
-  switch (interaction.customId) {
-    case "beginner":
-      responseMessage = "To start the Beginner challenge, type `!beginner`.";
-      break;
-    case "intermediate":
-      responseMessage =
-        "To start the Intermediate challenge, type `!intermediate`.";
-      break;
-    case "advanced":
-      responseMessage = "To start the Advanced challenge, type `!advanced`.";
-      break;
-    default:
-      responseMessage = "Invalid selection";
-  }
+
+
+    let responseMessage = "";
+    switch (interaction.customId) {
+      case "beginner":
+        responseMessage = "To start the Beginner challenge, type `!beginner`.";
+        break;
+      case "intermediate":
+        responseMessage =
+          "To start the Intermediate challenge, type `!intermediate`.";
+        break;
+      case "advanced":
+        responseMessage = "To start the Advanced challenge, type `!advanced`.";
+        break;
+      default:
+        responseMessage = "Invalid selection";
+    }
+  
+
+
 
   await interaction.reply({ content: responseMessage, ephemeral: true });
   console.log(`Replied to ${interaction.customId} interaction`);
 });
 
 client.login(process.env.DISCORD_TOKEN);
+
+
+// module.exports = 

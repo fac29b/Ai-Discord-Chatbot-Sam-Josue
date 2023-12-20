@@ -2,12 +2,12 @@
   "type": "module",
   "name": "sam-josue-chatbot",
   "version": "1.0.0",
-  "description": "",
+  "description": "This Discord bot is designed to help users practice their JavaScript code-reading skills. The bot provides code challenges for different difficulty levels and allows users to interact with the challenges using buttons or commands.",
   "main": "bot.js",
   "scripts": {
     "start": "node bot.js",
     "devStart": "nodemon bot.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "keywords": [],
   "author": "",
@@ -18,6 +18,8 @@
     "openai": "^4.20.1"
   },
   "devDependencies": {
+    "chai": "^4.3.10",
+    "mocha": "^10.2.0",
     "nodemon": "^3.0.2"
   }
 }
