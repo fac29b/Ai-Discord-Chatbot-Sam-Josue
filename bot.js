@@ -4,6 +4,7 @@ import { OpenAI } from "openai";
 dotenv.config();
 let conversation = [];
 let botIntroMsg = "Hello there! I am a bot designed to help you practice your Javascriptcode-reading skills. I have 3 modes, Beginner, Intermediate and Advanced. Selecting one of these buttons will provide you with an appropriate Javascript example code to read. In addition to using the buttons, you can type prompts to start the challenges, too. For Beginner, type = !beginner | For Intermediate, type !intermediate | For Advanced, type !advanced.";
+let responseMessage = ""
 
 const botButtons = [
 
@@ -121,21 +122,12 @@ client.on("interactionCreate", async (interaction) => {
 
 
 
-    let responseMessage = "";
-    switch (interaction.customId) {
-      case "beginner":
-        responseMessage = "To start the Beginner challenge, type `!beginner`.";
-        break;
-      case "intermediate":
-        responseMessage =
-          "To start the Intermediate challenge, type `!intermediate`.";
-        break;
-      case "advanced":
-        responseMessage = "To start the Advanced challenge, type `!advanced`.";
-        break;
-      default:
-        responseMessage = "Invalid selection";
-    }
+
+
+introMessage()
+
+  
+
   
 
 
@@ -147,4 +139,22 @@ client.on("interactionCreate", async (interaction) => {
 client.login(process.env.DISCORD_TOKEN);
 
 
-// module.exports = 
+function introMessage() {
+  switch (interaction.customId) {
+    case "beginner":
+      responseMessage = "To start the Beginner challenge, type `!beginner`.";
+      break;
+    case "intermediate":
+      responseMessage =
+        "To start the Intermediate challenge, type `!intermediate`.";
+      break;
+    case "advanced":
+      responseMessage = "To start the Advanced challenge, type `!advanced`.";
+      break;
+    default:
+      responseMessage = "Invalid selection";
+  }
+}
+
+
+module.exports = introMessage;
